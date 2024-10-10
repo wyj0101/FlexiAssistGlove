@@ -1,0 +1,19 @@
+# Copyright (c) 2022, TOKITA Hiroshi <tokita.hiroshi@gmail.com>
+# SPDX-License-Identifier: Apache-2.0
+
+identifier: stm32f030c8t6
+name: ST STM32F030C8T6 BOARD
+type: mcu
+arch: arm
+ram: 8
+flash: 64
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+supported:
+  - pwm
+  - gpio
+  - counter
+  - dma
+  - spi

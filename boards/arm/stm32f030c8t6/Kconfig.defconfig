@@ -1,0 +1,9 @@
+# Copyright (c) 2022, TOKITA Hiroshi <tokita.hiroshi@gmail.com>
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_STM32F030C8T6
+
+config BOARD
+	default "stm32f030c8t6"
+
+endif # BOARD_STM32F030C8T6
