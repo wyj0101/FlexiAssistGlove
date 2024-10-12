@@ -18,7 +18,15 @@
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 	};
-
+	air-valve {
+		compatible = "air,valve";
+		valve-gpios = <&gpiob 9  GPIO_ACTIVE_HIGH>,	// valve1
+		              <&gpiob 8  GPIO_ACTIVE_HIGH>,	// valve2
+					  <&gpiob 7  GPIO_ACTIVE_HIGH>,	// valve3
+					  <&gpiob 6 GPIO_ACTIVE_HIGH>,	// valve4
+					  <&gpiob 5 GPIO_ACTIVE_HIGH>,	// valve5
+					  <&gpioa 15 GPIO_ACTIVE_HIGH>;	// valve6
+	};
 };
 
 &clk_hse {
@@ -40,11 +48,6 @@
 	apb1-prescaler = <1>;
 };
 
-/* Due to limited available memory, don't enable gpioc,d,e,f */
-&gpioc {status = "disabled";};
-&gpiod {status = "disabled";};
-&gpiof {status = "disabled";};
-
 &usart1 {
 	pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
 	pinctrl-names = "default";
@@ -65,5 +68,51 @@
 		compatible = "invensense,mpu6050";
 		reg = <0x68>;
 		status = "okay";
+	};
+};
+&spi2 {
+	status = "okay";
+	pinctrl-0 = <&spi2_miso_pb14 &spi2_mosi_pb15 &spi2_sck_pb13>;
+	pinctrl-names = "default";
+	cs-gpios = <&gpioa 11 GPIO_ACTIVE_LOW>,
+	           <&gpiob 3  GPIO_ACTIVE_LOW>,
+	           <&gpioa 12 GPIO_ACTIVE_LOW>,
+	           <&gpiob 4  GPIO_ACTIVE_LOW>;
+
+	sensor0: sensor0@0 {
+		status = "okay";
+		compatible = "us6330-015-s";
+		reg = <0>;
+		spi-max-frequency = <18000000>;
+	};
+	sensor1: sensor1@1 {
+		status = "okay";
+		compatible = "us6330-015-s";
+		reg = <1>;
+		spi-max-frequency = <18000000>;
+	};
+	sensor2: sensor2@2 {
+		status = "okay";
+		compatible = "us6330-015-s";
+		reg = <2>;
+		spi-max-frequency = <18000000>;
+	};
+	sensor3: sensor3@3 {
+		status = "okay";
+		compatible = "us6330-015-s";
+		reg = <3>;
+		spi-max-frequency = <18000000>;
+	};
+};
+
+&timers3 {
+	status = "okay";
+
+	pwm: pwm {
+		compatible = "st,stm32-pwm";
+		status = "okay";
+		pinctrl-0 = <&tim3_ch1_pa6 &tim3_ch2_pa7>;
+		pinctrl-names = "default";
+		#pwm-cells = <3>;
 	};
 };
