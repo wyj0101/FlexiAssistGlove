@@ -12,9 +12,9 @@
 #define IMU_STACK_SIZE 1024
 
 typedef struct imu_data {
-	double accl_x;
-	double accl_y;
-	double accl_z;
+	double acce_x;
+	double acce_y;
+	double acce_z;
 	double gyro_x;
 	double gyro_y;
 	double gyro_z;

@@ -1,10 +1,10 @@
 /*
  * @Author: wang,yongjing
  * @Date: 2024-10-15 09:20:29
- * @LastEditTime: 2024-10-15 14:15:28
+ * @LastEditTime: 2024-10-15 14:39:15
  * @LastEditors: wang,yongjing
  * @Description:
- * @FilePath: /temperature-control/FlexiAssistGlove/src/app/IMU/imu.c
+ * @FilePath: /temperature-control/FlexiAssistGlove/src/app/imu/imu.c
  *
  */
 #include <zephyr/device.h>
@@ -19,8 +19,8 @@
 
 static struct k_thread imu_handle_thread;
 static K_KERNEL_STACK_MEMBER(imu_handle_stack, IMU_STACK_SIZE);
-static const struct device *imu_arm = DEVICE_DT_GET(DT_NODELABEL(IMU_ARM));
-static const struct device *imu_palm = DEVICE_DT_GET(DT_NODELABEL(IMU_PALM));
+static const struct device *imu_arm = DEVICE_DT_GET(DT_NODELABEL(imu_arm));
+static const struct device *imu_palm = DEVICE_DT_GET(DT_NODELABEL(imu_palm));
 
 int get_imu_value(const struct device *dev, imu_data *value)
 {
@@ -92,7 +92,7 @@ static void imu_handle(void *arug0, void *arug1, void *arug2)
 		       imu_arm_value.gyro_y, imu_arm_value.gyro_z, imu_arm_value.temp);
 		printf("palm: acce: %f %f %f gyro: %f %f %f temp: %f\n", imu_palm_value.acce_x,
 		       imu_palm_value.acce_y, imu_palm_value.acce_z, imu_palm_value.gyro_x,
-		       imu_palm_value.gyro_y, imu_palm_value.gyro_z, imu_palm_value.temp)
+		       imu_palm_value.gyro_y, imu_palm_value.gyro_z, imu_palm_value.temp);
 	}
 }
 void imu_init()

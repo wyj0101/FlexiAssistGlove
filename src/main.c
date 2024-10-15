@@ -9,7 +9,7 @@ int main(void)
 {
 	printf("main start !\n");
 
-	// imu_init();
+	imu_init();
 	air_sensor_init();
 
 	return 0;

@@ -17,7 +17,7 @@ FILE(GLOB sensor src/app/sensor/*.c)
 FILE(GLOB imu src/app/imu/*.c)
 
 target_sources(app PRIVATE ${sensor})
-# target_sources(app PRIVATE ${imu})
+target_sources(app PRIVATE ${imu})
 target_sources(app PRIVATE src/main.c)
 
 
