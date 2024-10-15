@@ -20,12 +20,12 @@
 	};
 	air-valve {
 		compatible = "air,valve";
-		valve-gpios = <&gpiob 9  GPIO_ACTIVE_HIGH>,	// valve1
-		              <&gpiob 8  GPIO_ACTIVE_HIGH>,	// valve2
-					  <&gpiob 7  GPIO_ACTIVE_HIGH>,	// valve3
-					  <&gpiob 6 GPIO_ACTIVE_HIGH>,	// valve4
-					  <&gpiob 5 GPIO_ACTIVE_HIGH>,	// valve5
-					  <&gpioa 15 GPIO_ACTIVE_HIGH>;	// valve6
+		valve-gpios = <&gpiob 9  GPIO_ACTIVE_HIGH>,    // valve1
+		<&gpiob 8  GPIO_ACTIVE_HIGH>,    // valve2
+		<&gpiob 7  GPIO_ACTIVE_HIGH>,    // valve3
+		<&gpiob 6 GPIO_ACTIVE_HIGH>,    // valve4
+		<&gpiob 5 GPIO_ACTIVE_HIGH>,    // valve5
+		<&gpioa 15 GPIO_ACTIVE_HIGH>;    // valve6
 	};
 };
 
@@ -64,9 +64,14 @@
 	pinctrl-names = "default";
 	clock-frequency = <I2C_BITRATE_STANDARD>;
 
-	mpu6050@68 {
+	IMU_ARM: mpu6050@68 {
 		compatible = "invensense,mpu6050";
 		reg = <0x68>;
+		status = "okay";
+	};
+	IMU_PALM: mpu6050@69 {
+		compatible = "invensense,mpu6050";
+		reg = <0x69>;
 		status = "okay";
 	};
 };

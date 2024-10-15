@@ -9,11 +9,16 @@
  */
 #pragma once
 
-#define SENSOR_STACK_SIZE 1024
+#define IMU_STACK_SIZE 1024
 
-#define SPI_FREQUENCY 18000000U // 18M
-#define SPI_OPERTION (SPI_OP_MODE_MASTER | SPI_TRANSFER_MSB | SPI_WORD_SET(8))
+typedef struct imu_data {
+	double accl_x;
+	double accl_y;
+	double accl_z;
+	double gyro_x;
+	double gyro_y;
+	double gyro_z;
+	double temp;
+} imu_data;
 
-#define SENSOR_COUNT 4
-
-void air_sensor_init();
+void imu_init();
