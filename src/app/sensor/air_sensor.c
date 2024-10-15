@@ -1,7 +1,7 @@
 /*
  * @Author: wang,yongjing
  * @Date: 2024-10-15 09:20:29
- * @LastEditTime: 2024-10-15 09:34:43
+ * @LastEditTime: 2024-10-15 09:38:51
  * @LastEditors: wang,yongjing
  * @Description: 
  * @FilePath: /temperature-control/FlexiAssistGlove/src/app/sensor/air_sensor.c
@@ -39,12 +39,12 @@ struct gpio_dt_spec sensor_cs[SENSOR_COUNT] = {
     SPI_CS_GPIOS_DT_SPEC_GET(DT_NODELABEL(sensor2)),
     SPI_CS_GPIOS_DT_SPEC_GET(DT_NODELABEL(sensor3)),
 };
-struct spi_config sensor_cfg[SENSOR_COUNT] = {0};
+static struct spi_config sensor_cfg[SENSOR_COUNT] = {0};
 
-static uint8_t start_cmd[] = {0xaa, 0x00, 0x00};
-static uint8_t read_cmd[] = {0x00, 0x00, 0x00, 0x00};
+static const uint8_t start_cmd[] = {0xaa, 0x00, 0x00};
+static const uint8_t read_cmd[] = {0x00, 0x00, 0x00, 0x00};
 
-uint8_t value_buff[4] = {0};
+static uint8_t value_buff[4] = {0};
 
 static struct spi_buf start_cmd_buff = {
     .buf = start_cmd,
@@ -76,11 +76,11 @@ const static struct spi_buf_set read_value_set = {
     .count = 1,
 };
 
-float value = 0;
+static float value = 0;
 float sensor_value[SENSOR_COUNT] = {0};
 /* Please manually calibrate the sensor here */
 /* sensor_real_value = raw_value - sensor_adjust*/
-float sensor_adjust[SENSOR_COUNT] = {
+static const float sensor_adjust[SENSOR_COUNT] = {
     100.5,
     -100,
     100,
