@@ -9,7 +9,7 @@
  */
 #pragma once
 
-#define IMU_STACK_SIZE 1024
+#define IMU_STACK_SIZE 768
 
 typedef struct imu_data {
 	double acce_x;

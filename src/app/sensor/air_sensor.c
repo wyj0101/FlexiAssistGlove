@@ -81,10 +81,10 @@ float sensor_value[SENSOR_COUNT] = {0};
 /* Please manually calibrate the sensor here */
 /* sensor_real_value = raw_value - sensor_adjust*/
 static const float sensor_adjust[SENSOR_COUNT] = {
-	100.5,
-	-100,
-	100,
-	-100,
+	0,
+	0,
+	0,
+	0,
 };
 static int sensor_config_init(void)
 {
