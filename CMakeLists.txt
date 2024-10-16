@@ -12,12 +12,15 @@ target_include_directories(app PRIVATE ${ZEPHYR_BASE}/include/zephyr)
 
 target_include_directories(app PRIVATE src/app/sensor)
 target_include_directories(app PRIVATE src/app/imu)
+target_include_directories(app PRIVATE src/app/dev)
 
 FILE(GLOB sensor src/app/sensor/*.c)
 FILE(GLOB imu src/app/imu/*.c)
+FILE(GLOB dev src/app/dev/*.c)
 
 target_sources(app PRIVATE ${sensor})
 target_sources(app PRIVATE ${imu})
+target_sources(app PRIVATE ${dev})
 target_sources(app PRIVATE src/main.c)
 
 

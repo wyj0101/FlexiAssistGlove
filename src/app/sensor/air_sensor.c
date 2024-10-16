@@ -1,7 +1,7 @@
 /*
  * @Author: wang,yongjing
  * @Date: 2024-10-15 09:20:29
- * @LastEditTime: 2024-10-15 14:34:39
+ * @LastEditTime: 2024-10-16 09:47:37
  * @LastEditors: wang,yongjing
  * @Description:
  * @FilePath: /temperature-control/FlexiAssistGlove/src/app/sensor/air_sensor.c

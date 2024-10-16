@@ -1,7 +1,7 @@
 /*
  * @Author: wang,yongjing
  * @Date: 2024-10-15 09:20:29
- * @LastEditTime: 2024-10-15 14:39:15
+ * @LastEditTime: 2024-10-16 19:13:28
  * @LastEditors: wang,yongjing
  * @Description:
  * @FilePath: /temperature-control/FlexiAssistGlove/src/app/imu/imu.c
@@ -65,10 +65,10 @@ static void imu_handle(void *arug0, void *arug1, void *arug2)
 {
 	printf("imu handle start!\n");
 
-	if (!device_is_ready(imu_arm) || !device_is_ready(imu_palm)) {
-		printf("imu device not ready\n");
-		return;
-	}
+	// if (!device_is_ready(imu_arm) || !device_is_ready(imu_palm)) {
+	// 	printf("imu device not ready\n");
+	// 	return;
+	// }
 
 	imu_data imu_arm_raw_value = {0}, imu_palm_raw_value = {0};
 	imu_data imu_arm_value = {0}, imu_palm_value = {0};

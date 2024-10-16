@@ -4,13 +4,15 @@
 
 #include "air_sensor.h"
 #include "imu.h"
+#include "pwm.h"
 
 int main(void)
 {
 	printf("main start !\n");
 
-	imu_init();
-	air_sensor_init();
+	pwm_device_init();
+	// imu_init();
+	// air_sensor_init();
 
 	return 0;
 }
