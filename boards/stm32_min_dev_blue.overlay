@@ -39,9 +39,9 @@
 	&spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
 	pinctrl-names = "default";
 
-	cs-gpios = <&gpioa 12 GPIO_ACTIVE_LOW>,
+	cs-gpios = <&gpioa 11 GPIO_ACTIVE_LOW>,
 	           <&gpiob 3  GPIO_ACTIVE_LOW>,
-	           <&gpioa 11 GPIO_ACTIVE_LOW>,
+	           <&gpioa 12 GPIO_ACTIVE_LOW>,
 	           <&gpiob 4  GPIO_ACTIVE_LOW>;
 
 	sensor0: sensor0@0 {

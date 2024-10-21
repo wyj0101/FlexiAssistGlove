@@ -113,7 +113,7 @@
 &timers3 {
 	status = "okay";
 
-	tim3: pwm {
+	pwm1: pwm {
 		compatible = "st,stm32-pwm";
 		status = "okay";
 		pinctrl-0 = <&tim3_ch1_pa6 &tim3_ch2_pb5>;
@@ -125,7 +125,7 @@
 &timers14 {
 	status = "okay";
 
-	tim14: pwm {
+	pwm2: pwm {
 		compatible = "st,stm32-pwm";
 		status = "okay";
 		pinctrl-0 = <&tim14_ch1_pa7>;
@@ -136,7 +136,7 @@
 &timers16 {
 	status = "okay";
 
-	tim16: pwm {
+	pwm3: pwm {
 		compatible = "st,stm32-pwm";
 		status = "okay";
 		pinctrl-0 = <&tim16_ch1_pb8>;
@@ -148,7 +148,7 @@
 &timers17 {
 	status = "okay";
 
-	tim17: pwm {
+	pwm4: pwm {
 		compatible = "st,stm32-pwm";
 		status = "okay";
 		pinctrl-0 = <&tim17_ch1_pb9>;
