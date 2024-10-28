@@ -9,36 +9,23 @@
  */
 #pragma once
 
-#define PWM0_PERIOD 33600 // 20KHz
-#define PWM2_PERIOD 16800 // 20KHz
-#define PWM3_PERIOD 16800 // 20KHz
+#define PUMP_PERIOD 7200
 
-#define FAN_PERIOD   4200 // 10KHz
-#define SERVO_PERIOD 8400
+#define VALVE_PERIOD 1000
 
-enum pwm_port {
-	PWM1 = 0,
-	PWM2,
-	PWM3,
-	PWM4,
-	PWM5,
-	PWM6,
-	PWM7,
-	PWM8,
-	PWM9,
-	PWM10,
-	PWM11,
-	PWM12,
-	PWM_MAX
+enum pump_channel {
+	PUMP_V1,
+	PUMP_V2
 };
-enum pwm_channal {
-	PWM_CH0 = 0,
-	PWM_CH1,
-	PWM_CH2,
-	PWM_CH3,
+enum valve_channel {
+	VALVE_V3,
+	VALVE_V4,
+	VALVE_V5,
+	VALVE_V6,
+	VALVE_P1,
+	VALVE_P2,
 };
-enum fan_port {
-	FAN1,
-	FAN2
-};
+
 int pwm_device_init(void);
+int pwm_set_period(enum pump_channel channel, uint32_t period);
+int valve_set_period(enum valve_channel channel, uint8_t period);

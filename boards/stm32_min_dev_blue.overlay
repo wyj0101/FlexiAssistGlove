@@ -87,6 +87,7 @@
 		pinctrl-0 = <&tim2_ch1_remap1_pwm_out_pa15>;
 		pinctrl-names = "default";
 	};
+
 };
 
 &timers3 {
@@ -101,9 +102,9 @@
 &timers4 {
 	status = "okay";
 
-	pwm4: pwm {
+	pump_pwm: pwm {
 		status = "okay";
-		pinctrl-0 = <&tim4_ch1_pwm_out_pb6 &tim4_ch2_pwm_out_pb7 &tim4_ch3_pwm_out_pb8 &tim4_ch4_pwm_out_pb9>;
+		pinctrl-0 = <&tim4_ch3_pwm_out_pb8 &tim4_ch4_pwm_out_pb9>;
 		pinctrl-names = "default";
 	};
 };

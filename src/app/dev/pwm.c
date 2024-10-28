@@ -1,62 +1,106 @@
 /*
  * @Author: wang,yongjing
  * @Date: 2024-10-16 16:46:58
- * @LastEditTime: 2024-10-16 19:31:55
+ * @LastEditTime: 2024-10-28 11:07:49
  * @LastEditors: wang,yongjing
  * @Description:
  * @FilePath: /temperature-control/FlexiAssistGlove/src/app/dev/pwm.c
  *
  */
-/*
- * @Author: wang,yongjing
- * @Date: 2024-05-31 09:26:25
- * @LastEditTime: 2024-05-31 15:19:11
- * @LastEditors: wang,yongjing
- * @Description: motor control file
- * @FilePath: /temperature-control/pneumatic-control-device/src/lib/motor/motor.c
- *
- */
+#include <string.h>
 #include <zephyr/device.h>
 #include <zephyr/kernel.h>
-#include <string.h>
 #include <zephyr/sys/printk.h>
 #include <zephyr/kernel/thread_stack.h>
-#include <zephyr/device.h>
 #include <zephyr/drivers/pwm.h>
-#include <zephyr/logging/log.h>
+#include <zephyr/drivers/gpio.h>
+
+#include "stm32_ll_gpio.h"
 #include "pwm.h"
 
-/*	1- error
- *	2- warning
- *	3- info	(default)
- *	4- debug
- */
-LOG_MODULE_REGISTER(motor, 4);
+const struct device *pump_dev = DEVICE_DT_GET(DT_NODELABEL(pump_pwm));
+static const struct device *gpioa_dev = DEVICE_DT_GET(DT_NODELABEL(gpioa));
+static const struct device *gpiob_dev = DEVICE_DT_GET(DT_NODELABEL(gpiob));
 
-const struct device *pwm_dev1 = DEVICE_DT_GET(DT_NODELABEL(pwm1));
-const struct device *pwm_dev2 = DEVICE_DT_GET(DT_NODELABEL(pwm2));
-const struct device *pwm_dev3 = DEVICE_DT_GET(DT_NODELABEL(pwm3));
-const struct device *pwm_dev4 = DEVICE_DT_GET(DT_NODELABEL(pwm4));
+static int count = 0;
+static uint8_t valve_v3, valve_v4, valve_v5, valve_v6, valve_p1, valve_p2;
 
-// const struct device *pwm_dev2 = DEVICE_DT_GET(DT_NODELABEL(pwm2));
-// const struct device *pwm_dev3 = DEVICE_DT_GET(DT_NODELABEL(pwm3));
-// const struct device *pwm_dev7 = DEVICE_DT_GET(DT_NODELABEL(pwm7));
-
-int pwm_device_init()
+int valve_set_period(enum valve_channel channel, uint8_t period)
 {
-	if (!device_is_ready(pwm_dev1)) {
-		LOG_ERR("pwm0 device is not ready\n");
-		return -1;
+	if (period > 100) {
+		period = 100;
 	}
 
-	pwm_set_cycles(pwm_dev1, 1, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
-	pwm_set_cycles(pwm_dev2, 1, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
-	pwm_set_cycles(pwm_dev3, 1, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
-	pwm_set_cycles(pwm_dev3, 2, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
-	pwm_set_cycles(pwm_dev4, 1, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
-	pwm_set_cycles(pwm_dev4, 2, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
-	pwm_set_cycles(pwm_dev4, 3, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
-	pwm_set_cycles(pwm_dev4, 4, FAN_PERIOD, 0.2 * FAN_PERIOD, 0);
+	switch (channel) {
+	case VALVE_P1:
+		valve_p1 = period;
+		break;
+	case VALVE_P2:
+		valve_p2 = period;
+		break;
+	case VALVE_V3:
+		valve_v3 = period;
+		break;
+	case VALVE_V4:
+		valve_v4 = period;
+		break;
+	case VALVE_V5:
+		valve_v5 = period;
+		break;
+	case VALVE_V6:
+		valve_v6 = period;
+		break;
+	default:
+		printf("Invalid valve channel\n");
+		return -1;
+	}
+	return 0;
+}
+static void valve_timer_handler(struct k_timer *timer)
+{
+	count++;
 
+	gpio_pin_set(gpioa_dev, 6, (count >= valve_p1 ? 1 : 0));
+	gpio_pin_set(gpioa_dev, 7, (count >= valve_p2 ? 1 : 0));
+	gpio_pin_set(gpiob_dev, 7, (count >= valve_v3 ? 1 : 0));
+	gpio_pin_set(gpiob_dev, 6, (count >= valve_v4 ? 1 : 0));
+	gpio_pin_set(gpiob_dev, 5, (count >= valve_v5 ? 1 : 0));
+	gpio_pin_set(gpioa_dev, 15, (count >= valve_v6 ? 1 : 0));
+
+	if (count >= 100) {
+		count = 0;
+	}
+}
+K_TIMER_DEFINE(valve_timer, valve_timer_handler, NULL);
+
+static void valve_gpio_init(void)
+{
+	__HAL_AFIO_REMAP_SWJ_NOJTAG();
+	gpio_pin_configure(gpioa_dev, 7, GPIO_OUTPUT);
+	gpio_pin_configure(gpioa_dev, 6, GPIO_OUTPUT);
+	gpio_pin_configure(gpioa_dev, 15, GPIO_OUTPUT);
+	gpio_pin_configure(gpiob_dev, 5, GPIO_OUTPUT);
+	gpio_pin_configure(gpiob_dev, 6, GPIO_OUTPUT);
+	gpio_pin_configure(gpiob_dev, 7, GPIO_OUTPUT);
+}
+int pwm_device_init()
+{
+	if (!device_is_ready(pump_dev)) {
+		return -1;
+	}
+	valve_gpio_init();
+	k_timer_start(&valve_timer, K_MSEC(VALVE_PERIOD / 100), K_MSEC(VALVE_PERIOD / 100));
+	return 0;
+}
+int pwm_set_period(enum pump_channel channel, uint32_t period)
+{
+	switch (channel) {
+	case PUMP_V1:
+		pwm_set_cycles(pump_dev, 4, PUMP_PERIOD, period * PUMP_PERIOD, 0);
+		break;
+	case PUMP_V2:
+		pwm_set_cycles(pump_dev, 3, PUMP_PERIOD, period * PUMP_PERIOD, 0);
+		break;
+	}
 	return 0;
 }
