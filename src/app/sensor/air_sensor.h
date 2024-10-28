@@ -16,4 +16,11 @@
 
 #define SENSOR_COUNT 4
 
+enum sensor_channel {
+	SENSOR_1 = 0,
+	SENSOR_2 = 1,
+	SENSOR_3 = 2,
+	SENSOR_4 = 3
+};
 void air_sensor_init();
+float sensor_read(enum sensor_channel channel);

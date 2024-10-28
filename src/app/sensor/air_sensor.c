@@ -1,7 +1,7 @@
 /*
  * @Author: wang,yongjing
  * @Date: 2024-10-15 09:20:29
- * @LastEditTime: 2024-10-16 09:47:37
+ * @LastEditTime: 2024-10-28 11:27:42
  * @LastEditors: wang,yongjing
  * @Description:
  * @FilePath: /temperature-control/FlexiAssistGlove/src/app/sensor/air_sensor.c
@@ -27,6 +27,16 @@
 LOG_MODULE_REGISTER(sensor, 4);
 #endif
 
+/************************USER CONFIG AREA*****************************/
+/* Please manually calibrate the sensor here */
+/* sensor_real_value = raw_value - sensor_adjust*/
+static const float sensor_adjust[SENSOR_COUNT] = {
+	0,
+	0,
+	0,
+	0,
+};
+/***************************END USER CONFIG**************************/
 static struct k_thread sensor_handle_thread;
 static K_KERNEL_STACK_MEMBER(sensor_handle_stack, SENSOR_STACK_SIZE);
 
@@ -77,15 +87,8 @@ const static struct spi_buf_set read_value_set = {
 };
 
 static float value = 0;
+/* sensor real-time value are strored in this array */
 float sensor_value[SENSOR_COUNT] = {0};
-/* Please manually calibrate the sensor here */
-/* sensor_real_value = raw_value - sensor_adjust*/
-static const float sensor_adjust[SENSOR_COUNT] = {
-	0,
-	0,
-	0,
-	0,
-};
 static int sensor_config_init(void)
 {
 	int i;
@@ -96,7 +99,10 @@ static int sensor_config_init(void)
 	}
 	return 0;
 }
-
+float sensor_read(enum sensor_channel channel)
+{
+	return sensor_value[channel];
+}
 void print_uart(char *buf)
 {
 	int msg_len = strlen(buf);
