@@ -9,7 +9,7 @@
  */
 #pragma once
 
-#define PUMP_PERIOD 7200
+#define PUMP_PERIOD 3600 // 20Khz
 
 #define VALVE_PERIOD 1000
 

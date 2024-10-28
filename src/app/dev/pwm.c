@@ -1,7 +1,7 @@
 /*
  * @Author: wang,yongjing
  * @Date: 2024-10-16 16:46:58
- * @LastEditTime: 2024-10-28 11:07:49
+ * @LastEditTime: 2024-10-28 14:56:21
  * @LastEditors: wang,yongjing
  * @Description:
  * @FilePath: /temperature-control/FlexiAssistGlove/src/app/dev/pwm.c
@@ -60,12 +60,12 @@ static void valve_timer_handler(struct k_timer *timer)
 {
 	count++;
 
-	gpio_pin_set(gpioa_dev, 6, (count >= valve_p1 ? 1 : 0));
-	gpio_pin_set(gpioa_dev, 7, (count >= valve_p2 ? 1 : 0));
-	gpio_pin_set(gpiob_dev, 7, (count >= valve_v3 ? 1 : 0));
-	gpio_pin_set(gpiob_dev, 6, (count >= valve_v4 ? 1 : 0));
-	gpio_pin_set(gpiob_dev, 5, (count >= valve_v5 ? 1 : 0));
-	gpio_pin_set(gpioa_dev, 15, (count >= valve_v6 ? 1 : 0));
+	gpio_pin_set(gpioa_dev, 6, (count >= valve_p1 ? 0 : 1));
+	gpio_pin_set(gpioa_dev, 7, (count >= valve_p2 ? 0 : 1));
+	gpio_pin_set(gpiob_dev, 7, (count >= valve_v3 ? 0 : 1));
+	gpio_pin_set(gpiob_dev, 6, (count >= valve_v4 ? 0 : 1));
+	gpio_pin_set(gpiob_dev, 5, (count >= valve_v5 ? 0 : 1));
+	gpio_pin_set(gpioa_dev, 15, (count >= valve_v6 ? 0 : 1));
 
 	if (count >= 100) {
 		count = 0;
@@ -94,13 +94,17 @@ int pwm_device_init()
 }
 int pwm_set_period(enum pump_channel channel, uint32_t period)
 {
+	float frequency = period * 0.01;
+
 	switch (channel) {
 	case PUMP_V1:
-		pwm_set_cycles(pump_dev, 4, PUMP_PERIOD, period * PUMP_PERIOD, 0);
+		pwm_set_cycles(pump_dev, 4, PUMP_PERIOD, frequency * PUMP_PERIOD, 0);
 		break;
 	case PUMP_V2:
-		pwm_set_cycles(pump_dev, 3, PUMP_PERIOD, period * PUMP_PERIOD, 0);
+		pwm_set_cycles(pump_dev, 3, PUMP_PERIOD, frequency * PUMP_PERIOD, 0);
 		break;
+	default:
+		return -1;
 	}
 	return 0;
 }
